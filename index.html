@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
+    <!-- Video element for explosion animation -->
+    <video id="explosionVideo" style="display:none" onended="showCanvas()">
+      <!-- Provide video source and type -->
+      <source src="Explosion-minesweeper.mp4" type="video/mp4" />
+    </video>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <meta charset="utf-8" />
+    <!-- Import fonts from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sixtyfour&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Buttons for different difficulty levels -->
+    <button id="ezbtn" class="button" onclick="easyDiff();hideDiffBtn()">
+      Easy
+    </button>
+    <button id="normbtn" class="button" onclick="normalDiff();hideDiffBtn()">
+      Normal
+    </button>
+    <button id="hardbtn" class="button" onclick="hardDiff();hideDiffBtn()">
+      Hard
+    </button>
+    <!-- Restart Button -->
+    <button id="rebtn" class="button" onclick="restart()">Restart</button>
+    <!-- Random Reveal Buttons -->
+    <button id="revealButtons1" class="button" onclick="revealRandomSafeSquare();reveal1()">Random Reveal</button>
+    <button id="revealButtons2" class="button" onclick="revealRandomSafeSquare();reveal2()">Random Reveal</button>
+    <button id="revealButtons3" class="button" onclick="revealRandomSafeSquare();reveal3()">Random Reveal</button>
+    <!-- Slider for number of lives -->
+    <input id="livesSlider" class="slider" type="range" min="1" max="5" value="3">
+    <!-- Button for timed mode -->
+    <button id="timedModeBtn" class="button" onclick="showTimerSlider()">Timed Mode</button>
+    <!-- Slider for timed mode -->
+    <input id="timedModeSlider" class="slider" type="range" min="15" max="300" value="120">
+  </head>
+  <body>
+    <main></main>
+    <script src="sketch.js"></script>
+  </body>
+</html>

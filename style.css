@@ -1,0 +1,212 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+/* Common styling for all buttons */
+.button {
+  border: 2;
+  color: #EAE0D5;
+  padding: 5px 7px;
+  background-color: #5E503F;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  transition-duration: 0.6s;
+  cursor: pointer;
+  position: absolute;
+}
+
+/* Common styling for all sliders */
+.slider {
+  position: absolute;
+  width: 250px;
+  background-color: #5E503F;
+  -webkit-appearance:none;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Styling for slider thumb in WebKit browsers */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000000;
+  height: 16px;
+  width: 16px;
+  border-radius: 10px;
+  background: #EAE0D5;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+/* Styling for slider thumb in Mozilla browsers */
+.slider::-moz-range-thumb {
+  -webkit-appearance: none;
+  border: 1px solid #000000;
+  height: 16px;
+  width: 16px;
+  border-radius: 10px;
+  background: #EAE0D5;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+
+/* Styling for Easy difficulty button */
+#ezbtn {
+  font-size: 20px;
+  top: 435px;
+  left: 50px;
+}
+
+/* Styling for Normal difficulty button */
+#normbtn {
+  font-size: 20px;
+  top: 435px;
+  left: 150px;
+}
+
+/* Styling for Hard difficulty button */
+#hardbtn {
+  font-size: 20px;
+  top: 435px;
+  left: 275px;
+}
+
+/* Styling for Restart button and hiding it initially */
+#rebtn {
+  display: none;
+  font-size: 25px;
+  top: 193px;
+  left: 140px;
+}
+
+/* Styling for random reveal buttons and hiding them initially */
+#revealButtons1 {
+  display: none;
+  font-size: 15px;
+  top: 440px;
+  left: 2.5px;
+}
+
+#revealButtons2 {
+  display: none;
+  font-size: 15px;
+  top: 440px;
+  left: 132.5px;
+}
+
+#revealButtons3 {
+  display: none;
+  font-size: 15px;
+  top: 440px;
+  left: 262.5px;
+}
+
+/* Styling for Lives Slider */
+#livesSlider {
+  top: 363px;
+  left: 130px;
+}
+
+/* Styling for Timed mode slider and hiding it initially */
+#timedModeSlider {
+  display: none;
+  top: 393px;
+  left: 130px;
+}
+
+/* Styling for Timed mode button */
+#timedModeBtn {
+  font-size: 20px;
+  top: 385px;
+  left: 125px;
+}
+
+/* Hover effects for all sliders */
+.slider:hover {
+  background: #000000;
+  transition-duration: 0.6s;
+  left: 125px;
+  width: 260px;
+}
+
+/* Hover effect for slider thumb in WebKit browsers */
+.slider::-webkit-slider-thumb:hover {
+  background: #F9FF6A;
+  transition-duration: 0.6s;
+}
+
+/* Hover effect for slider thumb in Mozilla browsers (typo: 'mox' should be 'moz') */
+.slider::-moz-range-thumb:hover {
+  background: #F9FF6A;
+  transition-duration: 0.6s;
+}
+
+/* Hover effect for Easy difficulty button */
+#ezbtn:hover {
+  background-color: #000000;
+  color: #59FF6A;
+  letter-spacing: 1px;
+  left: 48px;
+}
+
+/* Hover effect for Normal difficulty button */
+#normbtn:hover {
+  background-color: #000000;
+  color: #F9A620;
+  letter-spacing: 1px;
+  left: 148px;
+}
+
+/* Hover effect for Hard difficulty button */
+#hardbtn:hover {
+  background-color: #000000;
+  color:#DA2C38;
+  letter-spacing: 1px;
+  left: 273px;
+}
+
+/* Hover effect for Restart button */
+#rebtn:hover {
+  background-color: #085C07;
+  letter-spacing: 1px;
+  left: 138px;
+}
+
+/* Hover effect for Timed Mode button */
+#timedModeBtn:hover {
+  background-color: #085C07;
+  letter-spacing: 1px;
+  left: 120px;
+}
+
+/* Hover effects and disappear on click effects for reveal buttons */
+#revealButtons1:hover, #revealButtons2:hover, #revealButtons3:hover {
+  background-color: #085C07;
+  letter-spacing: 0.5px;
+}
+
+/* Specific left adjustments for hover effects on reveal buttons */
+#revealButtons1:hover {
+  left: 0.5px;
+}
+
+#revealButtons2:hover {
+  left: 130.5px;
+}
+
+#revealButtons3:hover {
+  left: 260.5px;
+}
+
+/* Disappear effect on click for reveal buttons */
+#revealButtons1.alrClicked, #revealButtons2.alrClicked, #revealButtons3.alrClicked {
+  transition-duration: 15s;
+  top: 10000px;
+}
