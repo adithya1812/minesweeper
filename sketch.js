@@ -38,7 +38,7 @@ function setup() {
   // Calculate the width of each square based on the number of columns
   w = 493 / cols;
   // Create a canvas with specified dimensions
-  createCanvas(493,593);
+  createCanvas(493, 593);
   // Initialize the grid, place mines, calculate neighbors, and create reveal buttons
   createGrid();
   placeMines();
@@ -242,14 +242,19 @@ function mousePressed() {
         // Check if the mouse click is within the boundaries of the current cell
         if (grid[i][j].contains(mouseX, mouseY)) {
           // Check if the cell contains a mine
-          if (grid[i][j].mine && gameIsOver == false && !grid[i][j].revealed) {
+          if (
+            grid[i][j].mine &&
+            gameIsOver == false &&
+            !grid[i][j].revealed &&
+            grid[i][j].flag == false
+          ) {
             // Decrement lives and trigger game over if lives reach zero
             lives--;
             grid[i][j].reveal();
             if (lives == 0) {
               gameOver();
             }
-          } else if (grid[i][j].flag==false) {
+          } else if (grid[i][j].flag == false) {
             // Reveal the cell if it doesn't contain a mine
             grid[i][j].reveal();
           }
