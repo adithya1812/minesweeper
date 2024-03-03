@@ -4,13 +4,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/addons/p5.sound.min.js"></script>
     <!-- Video element for explosion animation -->
-    <video id="explosionVideo" style="display:none" onended="showCanvas()">
+    <video id="explosionVideo" onended="showCanvas()">
       <!-- Provide video source and type -->
       <source src="Explosion-minesweeper.mp4" type="video/mp4" />
     </video>
+    <!--Minefield images -->
+    <img id="minefield1" class="photo" src="minefield1.jpeg">
+    <img id="minefield2" class="photo" src="minefield2.jpeg">
     <link rel="stylesheet" type="text/css" href="style.css" />
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Import fonts from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
