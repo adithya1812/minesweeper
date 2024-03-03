@@ -262,11 +262,13 @@ function mousePressed() {
         //Adding to the number of safe squares found
         if (grid[i][j].revealed) {
           if (grid[i][j].alrFound == false) {
-            totalFound++;
+            if(!grid[i][j].mine) {
+              totalFound++
+            }
             grid[i][j].alrFound = true;
           }
           // Game win mechanism
-          if (totalFound == cols * rows - totalMines && gameIsOver == false) {
+          if (totalFound == (cols * rows) - totalMines && gameIsOver == false) {
             gamewon = true;
           }
         }
