@@ -231,6 +231,6 @@ canvas {
 
 /* Disappear effect on click for reveal buttons */
 #revealButtons1.alrClicked, #revealButtons2.alrClicked, #revealButtons3.alrClicked {
-  transition-duration: 3s;
-  top: 2000px;
+  visibility: hidden;
+  transition-duration: 0.6s;
 }
