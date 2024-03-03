@@ -38,9 +38,9 @@ function setup() {
     );
   }
   // Calculate the width of each square based on the number of columns
-  w = 400 / cols;
+  w = 493 / cols;
   // Create a canvas with specified dimensions
-  createCanvas(w * cols, w * rows + 100);
+  createCanvas(493,593);
   // Initialize the grid, place mines, calculate neighbors, and create reveal buttons
   createGrid();
   placeMines();
@@ -60,11 +60,11 @@ function draw() {
     background("#778DA9");
     textFont("SixtyFour");
     fill("#E1E0DD");
-    textSize(30);
+    textSize(40);
     textAlign(CENTER);
-    text("Minesweeper", width / 2, 40);
+    text("Minesweeper", width / 2, 50);
     textFont("Roboto");
-    textSize(12);
+    textSize(15);
     textAlign(LEFT);
     textWrap(WORD);
     // Display Minesweeper game instructions
@@ -73,15 +73,15 @@ function draw() {
 
 Note: Mines are the coloured squares with a circle in the centre.`,
       15,
-      60,
+      75,
       width - 25
     );
     // Determine number of lives using lives slider
     lives = document.getElementById("livesSlider").value;
-    text(`Number of lives: ${lives}`, 15, 375);
+    text(`Number of lives: ${lives}`, 15, 475);
     if (timedMode == true) {
       timeLimit = document.getElementById("timedModeSlider").value;
-      text(`Time : ${timeLimit} seconds`, 15, 405);
+      text(`Time : ${timeLimit} seconds`, 15, 505);
     }
   } else if (canvasVisible == true) {
     // Display game grid, reveal buttons, and lives counter
@@ -428,7 +428,6 @@ function gameOver() {
   if (!videoPlayed) {
     document.getElementById("explosionVideo").style.display = "block";
     document.getElementById("explosionVideo").play();
-    document.getElementById("explosionVideo").playbackRate = 1.75;
     videoPlayed = true;
     canvasVisible = false;
   }
