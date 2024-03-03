@@ -1,5 +1,3 @@
-// Please use dark mode or high contrast
-
 // Define the number of columns, rows, and width of each square on the 2D grid
 let cols = 10,
   rows = 10,
@@ -246,16 +244,14 @@ function mousePressed() {
           // Check if the cell contains a mine
           if (grid[i][j].mine && gameIsOver == false && !grid[i][j].revealed) {
             // Decrement lives and trigger game over if lives reach zero
-            grid[i][j].flag = false;
             lives--;
             grid[i][j].reveal();
             if (lives == 0) {
               gameOver();
             }
-          } else {
+          } else if (grid[i][j].flag==false) {
             // Reveal the cell if it doesn't contain a mine
             grid[i][j].reveal();
-            grid[i][j].flag = false;
           }
         }
         //Adding to the number of safe squares found
