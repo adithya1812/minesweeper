@@ -3,7 +3,32 @@ html, body {
   padding: 0;
 }
 canvas {
+  margin-left: 393.5px;
+  margin-right: 393.5px;
   display: block;
+}
+
+/* Placing the explosion video in the right place and hiding it*/
+#explosionVideo {
+  margin-left: 393.5px;
+  display: none;
+}
+
+/* Styling for minefield images */
+.photo {
+  position: absolute;
+  width: 393.5px;
+  height:593px;
+}
+
+#minefield1 {
+  top:0px;
+  left:0px;
+}
+
+#minefield2 {
+  top:0px;
+  left: 886.5px;
 }
 
 /* Common styling for all buttons */
@@ -24,7 +49,7 @@ canvas {
 /* Common styling for all sliders */
 .slider {
   position: absolute;
-  width: 250px;
+  width: 335px;
   background-color: #5E503F;
   -webkit-appearance:none;
   margin: 0;
@@ -60,22 +85,22 @@ canvas {
 /* Styling for Easy difficulty button */
 #ezbtn {
   font-size: 20px;
-  top: 435px;
-  left: 50px;
+  top: 525px;
+  left: 500px;
 }
 
 /* Styling for Normal difficulty button */
 #normbtn {
   font-size: 20px;
-  top: 435px;
-  left: 150px;
+  top: 525px;
+  left: 600px;
 }
 
 /* Styling for Hard difficulty button */
 #hardbtn {
   font-size: 20px;
-  top: 435px;
-  left: 275px;
+  top: 525px;
+  left: 725px;
 }
 
 /* Styling for Restart button and hiding it initially */
@@ -83,57 +108,56 @@ canvas {
   display: none;
   font-size: 25px;
   top: 193px;
-  left: 140px;
+  left: 585px;
 }
 
 /* Styling for random reveal buttons and hiding them initially */
 #revealButtons1 {
   display: none;
   font-size: 15px;
-  top: 440px;
-  left: 2.5px;
+  top: 535px;
+  left: 420px;
 }
 
 #revealButtons2 {
   display: none;
   font-size: 15px;
-  top: 440px;
-  left: 132.5px;
+  top: 535px;
+  left: 575px;
 }
 
 #revealButtons3 {
   display: none;
   font-size: 15px;
-  top: 440px;
-  left: 262.5px;
+  top: 535px;
+  left: 730px;
 }
 
 /* Styling for Lives Slider */
 #livesSlider {
-  top: 363px;
-  left: 130px;
+  top: 462px;
+  left: 540px;
 }
 
 /* Styling for Timed mode slider and hiding it initially */
 #timedModeSlider {
   display: none;
-  top: 393px;
-  left: 130px;
+  top: 492px;
+  left: 540px;
 }
 
 /* Styling for Timed mode button */
 #timedModeBtn {
   font-size: 20px;
-  top: 385px;
-  left: 125px;
+  top: 480px;
+  left: 575px;
 }
 
 /* Hover effects for all sliders */
 .slider:hover {
   background: #000000;
   transition-duration: 0.6s;
-  left: 125px;
-  width: 260px;
+  width: 345px;
 }
 
 /* Hover effect for slider thumb in WebKit browsers */
@@ -153,7 +177,7 @@ canvas {
   background-color: #000000;
   color: #59FF6A;
   letter-spacing: 1px;
-  left: 48px;
+  left: 498.5px;
 }
 
 /* Hover effect for Normal difficulty button */
@@ -161,7 +185,7 @@ canvas {
   background-color: #000000;
   color: #F9A620;
   letter-spacing: 1px;
-  left: 148px;
+  left: 597.5px;
 }
 
 /* Hover effect for Hard difficulty button */
@@ -169,21 +193,21 @@ canvas {
   background-color: #000000;
   color:#DA2C38;
   letter-spacing: 1px;
-  left: 273px;
+  left: 723.5px;
 }
 
 /* Hover effect for Restart button */
 #rebtn:hover {
   background-color: #085C07;
   letter-spacing: 1px;
-  left: 138px;
+  left: 582px;
 }
 
 /* Hover effect for Timed Mode button */
 #timedModeBtn:hover {
   background-color: #085C07;
   letter-spacing: 1px;
-  left: 120px;
+  left: 570.5px;
 }
 
 /* Hover effects and disappear on click effects for reveal buttons */
@@ -194,19 +218,19 @@ canvas {
 
 /* Specific left adjustments for hover effects on reveal buttons */
 #revealButtons1:hover {
-  left: 0.5px;
+  left: 417px;
 }
 
 #revealButtons2:hover {
-  left: 130.5px;
+  left: 572px;
 }
 
 #revealButtons3:hover {
-  left: 260.5px;
+  left: 727px;
 }
 
 /* Disappear effect on click for reveal buttons */
 #revealButtons1.alrClicked, #revealButtons2.alrClicked, #revealButtons3.alrClicked {
-  transition-duration: 15s;
-  top: 10000px;
+  transition-duration: 3s;
+  top: 2000px;
 }
