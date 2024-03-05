@@ -22,6 +22,7 @@ let millisTime,
   countDown,
   timeLimit,
   timedMode = false; // Variables for timed game
+let wh, ww; //windowWidth and windowHeight variables
 
 function preload() {
   // Load the flag image
@@ -38,7 +39,7 @@ function setup() {
   // Calculate the width of each square based on the number of columns
   w = 493 / cols;
   // Create a canvas with specified dimensions
-  createCanvas(493, 593);
+  createCanvas(493, windowHeight);
   // Initialize the grid, place mines, calculate neighbors, and create reveal buttons
   createGrid();
   placeMines();
@@ -49,9 +50,17 @@ function setup() {
       grid[i][j].alrFound = false;
     }
   }
+  ww = (windowWidth - 886.5) + "px"
+  wh = windowHeight + "px"
 }
 
 function draw() {
+  // width and height or minefield photos
+  let mine1 = document.getElementById("minefield1")
+  mine1.style.height = wh
+  let mine2 = document.getElementById("minefield2")
+  mine2.style.width = ww
+  mine2.style.height = wh
   // Check the current canvas visibility to determine what to display
   if (canvasVisible == "landing") {
     // Display landing page content
@@ -207,7 +216,7 @@ function displayLivesCounter() {
     textAlign(CENTER, CENTER);
     textSize(20);
     textFont("SixtyFour");
-    text(`Lives: ${lives}`, width / 2, height - 75);
+    text(`Lives: ${lives}`, width / 2, 518);
   } else if (timedMode == true) {
     // Display timer and lives counter on the webpage
     if (gameIsOver == false) {
@@ -215,13 +224,13 @@ function displayLivesCounter() {
       textSize(17);
       textFont("SixtyFour");
       textAlign(CENTER, CENTER);
-      text(`Timer: ${countDown}s | Lives: ${lives}`, width / 2, height - 75);
+      text(`Timer: ${countDown}s | Lives: ${lives}`, width / 2, 518);
     } else if (gameIsOver == true) {
       fill("#EAE0D5");
       textSize(17);
       textFont("SixtyFour");
       textAlign(CENTER, CENTER);
-      text(`Timer: 0s | Lives: 0`, width / 2, height - 75);
+      text(`Timer: 0s | Lives: 0`, width / 2, 518);
     }
   }
 }
@@ -229,7 +238,7 @@ function displayLivesCounter() {
 // MousePressed event handler
 function mousePressed() {
   // Check if the mouse click is on the reveal buttons area
-  if (mouseY > height - 100) {
+  if (mouseY > 493) {
     return; // Ignore clicks on reveal buttons
   }
   if (mouseButton == LEFT) {
