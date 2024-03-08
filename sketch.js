@@ -1,11 +1,11 @@
 // Define the number of columns, rows, and width of each square on the 2D grid
 let cols = 10,
-  rows = 10,
+  rows,
   w;
 
 // "cols" is the number of columns, "rows" is the number of rows, and "w" is the width of each square on the 2D grid.
 let grid; // 2D array to represent the grid
-let totalMines; // The number of mines on the grid
+let totalMines, mines; // The number of mines on the grid
 let canvasVisible = "landing"; // Variable determining what is shown on the screen
 let videoPlayed = false; // Variable determining when the explosion video will be played (indicating loss)
 let gameIsOver = false,
@@ -18,11 +18,18 @@ let totalFound = 0,
   alrFound; // The number of safe squares found
 let flagImg; // Image of flag
 let millisTime,
+  speedrunMillis,
   startMillis,
   countDown,
   timeLimit,
-  timedMode = false; // Variables for timed game
+  endMillis,
+  speedrunEndMillis,
+  alrMillis = false,
+  timedMode = false; // Variables for timed game & speedrun mode
+let bestEasy, bestNormal, bestHard; //Variables for best time in speedrun mode
+let speedrun = false; //Variable for speedrun mode
 let wh, ww; //windowWidth and windowHeight variables
+let difficulty; // Variable for difficulty
 
 function preload() {
   // Load the flag image
@@ -38,6 +45,40 @@ function setup() {
   }
   // Calculate the width of each square based on the number of columns
   w = 493 / cols;
+  // Calculate number of rows based on height of screen
+  rows = round((windowHeight - 100) / w);
+  // WindowWidth and windowHeight based on screen size
+  ww = (windowWidth - 493) / 2;
+  wh = windowHeight;
+  if (ww < 0) {
+    ww = 0;
+  }
+  // Postioning of all images/buttons/sliders/video/canvas based on size of viewport
+  let mine1 = document.getElementById("minefield1");
+  mine1.style.width = ww + "px";
+  mine1.style.height = wh + "px";
+  let mine2 = document.getElementById("minefield2");
+  mine2.style.width = ww + "px";
+  mine2.style.height = wh + "px";
+  mine2.style.left = ww + 493 + "px";
+  document.getElementById("ezbtn").style.left = 101.5 + ww + "px";
+  document.getElementById("normbtn").style.left = 201.5 + ww + "px";
+  document.getElementById("hardbtn").style.left = 326.5 + ww + "px";
+  document.getElementById("rebtn").style.left = 186.5 + ww + "px";
+  document.getElementById("timedModeBtn").style.left = 70 + ww + "px";
+  document.getElementById("speedrunModeBtn").style.left = 250 + ww + "px";
+  document.getElementById("livesSlider").style.left = 144.5 + ww + "px";
+  document.getElementById("timedModeSlider").style.left = 144.5 + ww + "px";
+  let random1 = document.getElementById("revealButtons1");
+  random1.style.top = height - 58 + "px";
+  random1.style.left = 21.5 + ww + "px";
+  let random2 = document.getElementById("revealButtons2");
+  random2.style.top = height - 58 + "px";
+  random2.style.left = 176.5 + ww + "px";
+  let random3 = document.getElementById("revealButtons3");
+  random3.style.top = height - 58 + "px";
+  random3.style.left = 331.5 + ww + "px";
+  select("canvas").style("margin-left", ww + "px");
   // Create a canvas with specified dimensions
   createCanvas(493, windowHeight);
   // Initialize the grid, place mines, calculate neighbors, and create reveal buttons
@@ -50,17 +91,22 @@ function setup() {
       grid[i][j].alrFound = false;
     }
   }
-  ww = (windowWidth - 886.5) + "px"
-  wh = windowHeight + "px"
+  bestEasy = getItem('bestEasy');
+  bestNormal = getItem(`bestNormal`);
+  bestEasy = getItem(`bestEasy`);
 }
 
 function draw() {
-  // width and height or minefield photos
-  let mine1 = document.getElementById("minefield1")
-  mine1.style.height = wh
-  let mine2 = document.getElementById("minefield2")
-  mine2.style.width = ww
-  mine2.style.height = wh
+  // Setting the bests for each difficulty if it is the player's first time playing speedrun mode
+    if (bestEasy == null) {
+      bestEasy = "N.A.";
+    }
+    if (bestNormal == null) {
+      bestNormal = "N.A.";
+    }
+    if (bestHard == null) {
+      bestHard = "N.A.";
+    }
   // Check the current canvas visibility to determine what to display
   if (canvasVisible == "landing") {
     // Display landing page content
@@ -76,8 +122,7 @@ function draw() {
     textWrap(WORD);
     // Display Minesweeper game instructions
     text(
-      `Minesweeper is a logic puzzle where you unveil a hidden minefield. Imagine a grid of squares, some hiding sneaky mines, others safe. Left-click to cautiously open squares, and right-click to place a flag on a square which you suspect is a mine. When you left-click a square and it's safe, you'll see a number (1-8), revealing how many mines lurk nearby in the surrounding eight squares. Empty squares connected to that number automatically open, giving you a glimpse of the safe zone. Uncover all the safe squares, and you've conquered the minefield! There are three 'Random Reveal' buttons, which help you by revealing a random safe square. However, each button can only be used once. Use these buttons wisely. Additionally, you have a certain number of lives. When you click on a mine, the lives counter goes down. If you reach 0 lives left, BOOM! the minefield explodes and you lose! Remember, logic is key. Start small, use the numbers wisely, and don't get too greedy - too many wrong clicks can end your spree! Choose your preferred difficulty and begin by clicking the respective buttons - "Easy", "Normal", or "Hard". You can also choose a timed mode, where you have to win the game within a certain time!
-
+      `Minesweeper is a logic puzzle where you unveil a hidden minefield. Imagine a grid of squares, some hiding sneaky mines, others safe. Left-click to cautiously open squares, and right-click to place a flag on a square which you suspect is a mine. When you left-click a square and it's safe, you'll see a number (1-8), revealing how many mines lurk nearby in the surrounding eight squares. Empty squares connected to that number automatically open, giving you a glimpse of the safe zone. Uncover all the safe squares, and you've conquered the minefield! There are three 'Random Reveal' buttons, which help you by revealing a random safe square. However, each button can only be used once. Use these buttons wisely. Additionally, you have a certain number of lives. When you click on a mine, the lives counter goes down. If you reach 0 lives left, BOOM! the minefield explodes and you lose! Remember, logic is key. Start small, use the numbers wisely, and don't get too greedy - too many wrong clicks can end your spree! Choose your preferred difficulty and begin by clicking the respective buttons - "Easy", "Normal", or "Hard". You can also choose a timed mode, where you have to win the game within a certain time, or a speedrun mode, where you try to beat the game as fast as you can!
 Note: Mines are the coloured squares with a circle in the centre.`,
       15,
       75,
@@ -86,10 +131,18 @@ Note: Mines are the coloured squares with a circle in the centre.`,
     // Determine number of lives using lives slider
     lives = document.getElementById("livesSlider").value;
     text(`Number of lives: ${lives}`, 15, 475);
+    // Showing slider for timed mode
     if (timedMode == true) {
       timeLimit = document.getElementById("timedModeSlider").value;
       text(`Time : ${timeLimit} seconds`, 15, 505);
     }
+    // Showing text for speedrun mode
+    if (speedrun == true) {
+      textAlign(CENTER);
+      text("You have chosen speedrun mode.", width / 2, 505);
+      textAlign(LEFT);
+    }
+    totalFound = 0;
   } else if (canvasVisible == true) {
     // Display game grid, reveal buttons, and lives counter
     background("#29AB30");
@@ -97,29 +150,65 @@ Note: Mines are the coloured squares with a circle in the centre.`,
     displayRevealButtons();
     displayLivesCounter();
     millisTime = round((millis() - startMillis) / 1000);
+    speedrunMillis = round((millis() - startMillis) / 1000, 1);
     countDown = timeLimit - millisTime;
-    if (countDown == 0) {
+    if (countDown == 0 && gamewon == false && gameIsOver == false) {
       gameOver();
     }
   }
   // Display game over message and show restart button if game is over
   if (gameIsOver == true) {
-    noStroke();
-    fill("#778DA9");
-    rect(width / 2 - 150, 150, 300, 100);
-    fill("#E1E0DD");
-    textSize(30);
-    text("Game Over!", width / 2, 175);
-    showRestartButton();
+      noStroke();
+      fill("#778DA9");
+      rect(width / 2 - 150, 150, 300, 100);
+      fill("#E1E0DD");
+      textSize(30);
+      textAlign(CENTER, CENTER);
+      text("Game Over!", width / 2, 175);
+      showRestartButton();
   }
-  if (gamewon == true) {
+  // Display win message and show restart button if game is won
+  if (speedrun == false && gamewon == true) {
     noStroke();
     fill("#778DA9");
     rect(width / 2 - 150, 150, 300, 100);
     fill("#E1E0DD");
     textSize(30);
+    textAlign(CENTER, CENTER);
     text("You Won!", width / 2, 175);
     showRestartButton();
+  } else if (speedrun == true && gamewon == true) {
+  // Display win message, time taken, and best time, if game is won in speedrun mode
+    noStroke();
+    fill("#778DA9");
+    rect(width / 2 - 200, 150, 400, 150);
+    fill("#E1E0DD");
+    textSize(30);
+    textAlign(CENTER, CENTER);
+    text("You Won!", width / 2, 175);
+    textFont("Roboto");
+    if (difficulty == "easy") {
+      text(
+        `Time: ${speedrunEndMillis}s | Best: ${bestEasy}s`,
+         width / 2,
+        225
+      );
+    } else if (difficulty == "normal") {
+      text(
+        `Time: ${speedrunEndMillis}s | Best: ${bestNormal}s`,
+         width / 2,
+        225
+      );
+    } else if (difficulty == "hard") {
+      text(
+        `Time: ${speedrunEndMillis}s | Best: ${bestHard}s`,
+         width / 2,
+        225
+      );
+    }
+    document.getElementById("rebtn").style.top = "243px";
+    showRestartButton();
+    millisRecorder();
   }
 }
 
@@ -200,45 +289,77 @@ function revealRandomSafeSquare(button) {
 // Function to display the 'Random Reveal' buttons
 function displayRevealButtons() {
   // Display the 'Random Reveal' buttons on the webpage
-  let random1 = document.getElementById("revealButtons1");
-  random1.style.display = "inline-block";
-  let random2 = document.getElementById("revealButtons2");
-  random2.style.display = "inline-block";
-  let random3 = document.getElementById("revealButtons3");
-  random3.style.display = "inline-block";
+  document.getElementById("revealButtons1").style.display = "inline-block";
+  document.getElementById("revealButtons2").style.display = "inline-block";
+  document.getElementById("revealButtons3").style.display = "inline-block";
 }
 
 // Function to display the lives counter and timed mode (if chosen)
 function displayLivesCounter() {
   // Display the lives counter on the webpage
-  if (timedMode == false) {
+  if (timedMode == false && speedrun == false) {
     fill("#EAE0D5");
     textAlign(CENTER, CENTER);
     textSize(20);
     textFont("SixtyFour");
-    text(`Lives: ${lives}`, width / 2, 518);
-  } else if (timedMode == true) {
+    text(`Lives: ${lives}`, width / 2, height - 75);
+  } else if ((timedMode == true) & (speedrun == false)) {
     // Display timer and lives counter on the webpage
-    if (gameIsOver == false) {
+    if (gameIsOver == false && gamewon == false) {
       fill("#EAE0D5");
       textSize(17);
       textFont("SixtyFour");
       textAlign(CENTER, CENTER);
-      text(`Timer: ${countDown}s | Lives: ${lives}`, width / 2, 518);
-    } else if (gameIsOver == true) {
+      text(`Timer: ${countDown}s | Lives: ${lives}`, width / 2, height - 75);
+      console.log(gamewon);
+    } else if (gameIsOver == true || gamewon == true) {
       fill("#EAE0D5");
       textSize(17);
       textFont("SixtyFour");
       textAlign(CENTER, CENTER);
-      text(`Timer: 0s | Lives: 0`, width / 2, 518);
+      text(`Timer: ${endMillis}s | Lives: ${lives}`, width / 2, height - 75);
     }
-  }
-}
-
+  } else if (speedrun == true) {
+    if (gameIsOver == false && gamewon == false) {
+      fill("#EAE0D5");
+      textSize(17);
+      textFont("SixtyFour");
+      textAlign(LEFT, CENTER);
+      text(`Time:${speedrunMillis}s`, 75, height - 75);
+      text(` | Lives: ${lives}`, 225, height - 75);
+    } else if (gameIsOver == true || gamewon == true) {
+      fill("#EAE0D5");
+      textSize(17);
+      textFont("SixtyFour");
+      textAlign(LEFT, CENTER);
+      text(`Time:${speedrunEndMillis}s`, 75, height - 75);
+      text(` | Lives: ${lives}`, 225, height - 75);
+      if (gamewon == true) {
+        if (difficulty == "easy") {
+          if (bestEasy == "N.A." || bestEasy > speedrunEndMillis) {
+            storeItem(`bestEasy`, speedrunEndMillis);
+            bestEasy = getItem(`bestEasy`);
+            console.log(bestEasy)
+          } 
+        } else if (difficulty == "normal") {
+          if (bestNormal == "N.A." || bestNormal > speedrunEndMillis) {
+            storeItem(`bestNormal`, speedrunEndMillis);
+            bestNormal = getItem(`bestNormal`);
+          } 
+        } else if (difficulty == "hard") {
+          if (bestHard == "N.A." || bestHard > speedrunEndMillis) {
+            storeItem(`bestHard`, speedrunEndMillis);
+            bestHard = getItem(`bestHard`);
+              }
+            }
+          }
+        }
+      }
+    }
 // MousePressed event handler
 function mousePressed() {
   // Check if the mouse click is on the reveal buttons area
-  if (mouseY > 493) {
+  if (mouseY > height - 100) {
     return; // Ignore clicks on reveal buttons
   }
   if (mouseButton == LEFT) {
@@ -258,7 +379,7 @@ function mousePressed() {
             grid[i][j].flag == false
           ) {
             // Decrement lives and trigger game over if lives reach zero
-            lives--;
+            //lives--;
             grid[i][j].reveal();
             if (lives == 0) {
               gameOver();
@@ -271,13 +392,13 @@ function mousePressed() {
         //Adding to the number of safe squares found
         if (grid[i][j].revealed) {
           if (grid[i][j].alrFound == false) {
-            if(!grid[i][j].mine) {
-              totalFound++
+            if (!grid[i][j].mine) {
+              totalFound++;
             }
             grid[i][j].alrFound = true;
           }
           // Game win mechanism
-          if (totalFound == (cols * rows) - totalMines && gameIsOver == false) {
+          if (totalFound == cols * rows - totalMines && gameIsOver == false) {
             gamewon = true;
           }
         }
@@ -326,7 +447,7 @@ class Cell {
       noFill();
       rect(this.x, this.y, this.w, this.w);
       fill("#1B263B");
-      rect(0, w * rows, w * cols, 100);
+      rect(0, w * rows, w * cols, height - rows * w);
       // Check if the cell is revealed
       if (this.revealed == true) {
         // Check if the cell contains a mine
@@ -438,8 +559,10 @@ function gameOver() {
   canvasVisible = false;
   // Display explosion video and set speed of the video
   if (!videoPlayed) {
-    document.getElementById("explosionVideo").style.display = "block";
-    document.getElementById("explosionVideo").play();
+    let vid = document.getElementById("explosionVideo");
+    vid.style.display = "block";
+    vid.play();
+    vid.playbackRate = 2.5;
     videoPlayed = true;
     canvasVisible = false;
   }
@@ -450,26 +573,33 @@ function gameOver() {
     }
   }
   // Disable all 'Random Reveal' buttons
-  let reveal1 = document.getElementById("revealButtons1");
-  reveal1.disabled = "true";
-  let reveal2 = document.getElementById("revealButtons2");
-  reveal2.disabled = "true";
-  let reveal3 = document.getElementById("revealButtons3");
-  reveal3.disabled = "true";
+  document.getElementById("revealButtons1").disabled = "true";
+  document.getElementById("revealButtons2").disabled = "true";
+  document.getElementById("revealButtons3").disabled = "true";
+  endMillis = countDown;
+  speedrunEndMillis = speedrunMillis;
+}
+
+//Function to preserve timer when game is won
+function millisRecorder() {
+  if (alrMillis == false) {
+    endMillis = countDown;
+    speedrunEndMillis = speedrunMillis;
+    alrMillis = true;
+  }
 }
 
 // Function to hide all elements on the canvas
 function hideAll() {
-  fill("#1C1C1C");
+  fill(0);
   noStroke();
-  rect(0, 0, w * cols, w * rows + 100);
-  // Hide all 'Random Reveal' buttons
-  let reveal1 = document.getElementById("revealButtons1");
-  reveal1.style.display = "none";
-  let reveal2 = document.getElementById("revealButtons2");
-  reveal2.style.display = "none";
-  let reveal3 = document.getElementById("revealButtons3");
-  reveal3.style.display = "none";
+  rect(0, 0, 493, height);
+  // Hide all 'Random Reveal' buttons & minefield photos
+  document.getElementById("revealButtons1").style.display = "none";
+  document.getElementById("revealButtons2").style.display = "none";
+  document.getElementById("revealButtons3").style.display = "none";
+  document.getElementById("minefield1").style.display = "none";
+  document.getElementById("minefield2").style.display = "none";
 }
 
 // Function to show the game canvas
@@ -477,6 +607,9 @@ function showCanvas() {
   canvasVisible = true;
   // Hide explosion video
   document.getElementById("explosionVideo").style.display = "none";
+  // Show minefield photos
+  document.getElementById("minefield1").style.display = "inline-block";
+  document.getElementById("minefield2").style.display = "inline-block";
   // Mark all cells as revealed and set game over state
   for (let i = 0; i < cols; i++) {
     for (let j = 0; j < rows; j++) {
@@ -494,68 +627,66 @@ function restart() {
 
 // Function to set up the game for easy difficulty
 function easyDiff() {
-  cols = 8;
-  rows = 8;
   w = 50;
-  totalMines = 12;
+  cols = 8;
+  let mines = round(rows * cols * (15 / 64));
+  totalMines = mines;
   // Call the setup function to initialize the game with new parameters
   setup();
   // Set the game canvas as visible
   canvasVisible = true;
   startMillis = millis();
+  difficulty = "easy";
 }
 
 // Function to set up the game for normal difficulty
 function normalDiff() {
-  cols = 10;
-  rows = 10;
   w = 40;
-  totalMines = 25;
+  cols = 10;
+  let mines = round(rows * cols * 0.25);
+  totalMines = mines;
   // Call the setup function to initialize the game with new parameters
   setup();
   // Set the game canvas as visible
   canvasVisible = true;
   startMillis = millis();
+  difficulty = "normal"
 }
 
 // Function to set up the game for hard difficulty
 function hardDiff() {
-  cols = 12;
-  rows = 12;
   w = 33 + 1 / 3;
-  totalMines = 50;
+  cols = 12;
+  let mines = round(rows * cols * (25 / 72));
+  totalMines = mines;
   // Call the setup function to initialize the game with new parameters
   setup();
   // Set the game canvas as visible
   canvasVisible = true;
   startMillis = millis();
+  difficulty = "hard"
 }
 
 // Function to hide buttons and sliders
 function hideDiffBtn() {
   // Get and hide the button for easy difficulty
-  let button1 = document.getElementById("ezbtn");
-  button1.style.display = "none";
+  document.getElementById("ezbtn").style.display = "none";
   // Get and hide the button for normal difficulty
-  let button2 = document.getElementById("normbtn");
-  button2.style.display = "none";
+  document.getElementById("normbtn").style.display = "none";
   // Get and hide the button for hard difficulty
-  let button3 = document.getElementById("hardbtn");
-  button3.style.display = "none";
+  document.getElementById("hardbtn").style.display = "none";
   // Get and hide timed mode button
-  let button4 = document.getElementById("timedModeBtn");
-  button4.style.display = "none";
+  document.getElementById("timedModeBtn").style.display = "none";
+  //Get and hide speedrun mode button
+  document.getElementById("speedrunModeBtn").style.display = "none";
   // Get and hide the lives slider
-  let slider1 = document.getElementById("livesSlider");
-  slider1.style.display = "none";
+  document.getElementById("livesSlider").style.display = "none";
   // Get and hide the timed mode slider
-  let slider2 = document.getElementById("timedModeSlider");
-  slider2.style.display = "none";
+  document.getElementById("timedModeSlider").style.display = "none";
 }
 
 function showRestartButton() {
-  let restartButton = document.getElementById("rebtn");
-  restartButton.style.display = "inline-block";
+  document.getElementById("rebtn").style.display = "inline-block";
 }
 
 // Functions to disable random reveal buttons after one click
@@ -579,9 +710,15 @@ function reveal3() {
 
 // Function to show slider to choose the amount of time if Timer Mode button is clicked
 function showTimerSlider() {
-  let timerBtn = document.getElementById("timedModeBtn");
-  timerBtn.style.display = "none";
-  let timerSlider = document.getElementById("timedModeSlider");
-  timerSlider.style.display = "inline-block";
+  document.getElementById("timedModeBtn").style.display = "none";
+  document.getElementById("timedModeSlider").style.display = "inline-block";
+  document.getElementById("speedrunModeBtn").style.display = "none";
   timedMode = true;
+}
+
+//Function to setup speedrun mode
+function hideModeBtns() {
+  document.getElementById("timedModeBtn").style.display = "none";
+  document.getElementById("speedrunModeBtn").style.display = "none";
+  speedrun = true;
 }
