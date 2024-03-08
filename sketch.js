@@ -379,7 +379,7 @@ function mousePressed() {
             grid[i][j].flag == false
           ) {
             // Decrement lives and trigger game over if lives reach zero
-            //lives--;
+            lives--;
             grid[i][j].reveal();
             if (lives == 0) {
               gameOver();
