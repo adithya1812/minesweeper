@@ -635,7 +635,7 @@ function restart() {
 function easyDiff() {
   w = 50;
   cols = 8;
-  let mines = round(rows * cols * (15 / 64));
+  let mines = round(rows * cols * 0.1);
   totalMines = mines;
   // Call the setup function to initialize the game with new parameters
   setup();
@@ -649,7 +649,7 @@ function easyDiff() {
 function normalDiff() {
   w = 40;
   cols = 10;
-  let mines = round(rows * cols * 0.25);
+  let mines = round(rows * cols * 0.2);
   totalMines = mines;
   // Call the setup function to initialize the game with new parameters
   setup();
@@ -663,7 +663,7 @@ function normalDiff() {
 function hardDiff() {
   w = 33 + 1 / 3;
   cols = 12;
-  let mines = round(rows * cols * (25 / 72));
+  let mines = round(rows * cols * 0.35);
   totalMines = mines;
   // Call the setup function to initialize the game with new parameters
   setup();
