@@ -141,6 +141,12 @@ Note: Mines are the coloured squares with a circle in the centre.`,
       textAlign(CENTER);
       text("You have chosen speedrun mode.", width / 2, 505);
       textAlign(LEFT);
+      textSize(20);
+      text("Best:", 30, 600);
+      text(`${bestEasy} s`, 105, 600);
+      text(`${bestNormal} s`, 210, 600);
+      text(`${bestHard} s`, 335, 600);
+      textSize(15);
     }
     totalFound = 0;
   } else if (canvasVisible == true) {
