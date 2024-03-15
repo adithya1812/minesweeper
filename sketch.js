@@ -342,18 +342,19 @@ function displayLivesCounter() {
       text(` | Lives: ${lives}`, 225, height - 75);
       if (gamewon == true) {
         if (difficulty == "easy") {
-          if (bestEasy == "N.A." || bestEasy > speedrunEndMillis) {
+          if (bestEasy == "N.A." || bestEasy > speedrunEndMillis || bestEasy == "undefined") {
+            console.log(speedrunEndMillis)
             storeItem(`bestEasy`, speedrunEndMillis);
             bestEasy = getItem(`bestEasy`);
             console.log(bestEasy)
           } 
         } else if (difficulty == "normal") {
-          if (bestNormal == "N.A." || bestNormal > speedrunEndMillis) {
+          if (bestNormal == "N.A." || bestNormal > speedrunEndMillis || bestNormal == "undefined") {
             storeItem(`bestNormal`, speedrunEndMillis);
             bestNormal = getItem(`bestNormal`);
           } 
         } else if (difficulty == "hard") {
-          if (bestHard == "N.A." || bestHard > speedrunEndMillis) {
+          if (bestHard == "N.A." || bestHard > speedrunEndMillis || bestHard == "undefined") {
             storeItem(`bestHard`, speedrunEndMillis);
             bestHard = getItem(`bestHard`);
               }
